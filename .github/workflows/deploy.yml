@@ -1,0 +1,42 @@
+# Deploy Astro site to GitHub Pages
+# This workflow builds your Astro site and deploys the static output to the `gh-pages` branch.
+# No Jekyll is used. Astro's output is pure static HTML/CSS/JS.
+
+name: Deploy Astro site to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # or 'master' if that's your default branch
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Required to push to gh-pages branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: 3D-portfolio/lenidev-portfolio
+
+      - name: Build Astro site
+        run: npx astro build
+        working-directory: 3D-portfolio/lenidev-portfolio
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: 3D-portfolio/lenidev-portfolio/dist
+          publish_branch: gh-pages
+          force_orphan: true
