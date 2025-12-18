@@ -1,0 +1,281 @@
+@import "tailwindcss";
+@import "@fontsource/inter/index.css";
+@import "@fontsource/montserrat/index.css";
+
+/* ===== CSS Variables ===== */
+:root {
+  --neon-pink: #ff2a6d;
+  --neon-blue: #05d9e8;
+  --neon-cyan: #05d9e8;
+  --neon-white: #f0f0f0;
+  --neon-purple: #d300c5;
+  --dark-bg: #0a0a12;
+  --screen-bg: #0d0d1a;
+  --bezel-color: #1a1a1a;
+  /* Custom cursors */
+  --cursor-default: url('/assets/cursors/cursor-default.svg');
+  --cursor-pointer: url('/assets/cursors/cursor-pointer.svg');
+}
+
+/* ===== Base Styles ===== */
+* {
+  box-sizing: border-box;
+  cursor: var(--cursor-default), auto;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--dark-bg);
+  color: var(--neon-white);
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', 'Montserrat', Arial, sans-serif;
+  line-height: 1.6;
+}
+
+/* 8-bit cursor for interactive elements */
+a, 
+button, 
+[role="button"], 
+input[type="submit"], 
+input[type="button"],
+select,
+label[for],
+.clickable, 
+.neon-button, 
+.neon-button-subtle,
+.game-card-link,
+.nav-link,
+[onclick],
+summary {
+  cursor: var(--cursor-pointer), pointer !important;
+}
+
+/* Ensure hover state shows pointer */
+a:hover, 
+button:hover,
+.neon-button:hover,
+.neon-button-subtle:hover,
+.game-card-link:hover {
+  cursor: var(--cursor-pointer), pointer !important;
+}
+
+/* ===== Typography ===== */
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+  line-height: 1.8;
+  letter-spacing: 0.05em;
+}
+
+.font-body {
+  font-family: 'Inter', 'Montserrat', sans-serif;
+}
+
+/* ===== Neon Text Effects ===== */
+.neon-pink {
+  color: var(--neon-pink);
+  text-shadow: 
+    0 0 5px var(--neon-pink),
+    0 0 10px var(--neon-pink),
+    0 0 20px var(--neon-pink),
+    0 0 40px rgba(255, 42, 109, 0.6),
+    0 0 80px rgba(255, 42, 109, 0.4);
+}
+
+.neon-blue {
+  color: var(--neon-blue);
+  text-shadow: 
+    0 0 5px var(--neon-blue),
+    0 0 10px var(--neon-blue),
+    0 0 20px var(--neon-blue),
+    0 0 40px rgba(5, 217, 232, 0.6),
+    0 0 80px rgba(5, 217, 232, 0.4);
+}
+
+.neon-white {
+  color: var(--neon-white);
+  text-shadow: 
+    0 0 5px rgba(240, 240, 240, 0.9),
+    0 0 10px rgba(240, 240, 240, 0.7),
+    0 0 20px rgba(240, 240, 240, 0.5),
+    0 0 40px rgba(240, 240, 240, 0.3);
+}
+
+/* ===== Neon Border Effects ===== */
+.neon-pink-border {
+  border-color: var(--neon-pink);
+  box-shadow: 
+    0 0 5px var(--neon-pink),
+    0 0 10px var(--neon-pink),
+    0 0 20px rgba(255, 42, 109, 0.5),
+    0 0 40px rgba(255, 42, 109, 0.3),
+    inset 0 0 15px rgba(255, 42, 109, 0.2);
+}
+
+.neon-blue-border {
+  border-color: var(--neon-blue);
+  box-shadow: 
+    0 0 5px var(--neon-blue),
+    0 0 10px var(--neon-blue),
+    0 0 20px rgba(5, 217, 232, 0.5),
+    0 0 40px rgba(5, 217, 232, 0.3),
+    inset 0 0 15px rgba(5, 217, 232, 0.2);
+}
+
+.neon-white-border {
+  border-color: var(--neon-white);
+  box-shadow: 
+    0 0 5px rgba(240, 240, 240, 0.8),
+    0 0 10px rgba(240, 240, 240, 0.6),
+    0 0 20px rgba(240, 240, 240, 0.4),
+    0 0 40px rgba(240, 240, 240, 0.2),
+    inset 0 0 15px rgba(240, 240, 240, 0.1);
+}
+
+/* ===== Hover Effects ===== */
+.neon-pulse {
+  transition: all 0.5s ease-in-out;
+  will-change: transform, filter;
+}
+
+.neon-pulse:hover {
+  filter: brightness(1.15);
+  transform: scale(1.02);
+}
+
+.neon-pulse:focus-visible {
+  outline: 2px solid var(--neon-blue);
+  outline-offset: 4px;
+}
+
+/* ===== Neon Button ===== */
+.neon-button {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--neon-pink);
+  background: transparent;
+  border: 3px solid var(--neon-pink);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 
+    0 0 5px var(--neon-pink),
+    0 0 10px var(--neon-pink),
+    0 0 20px rgba(255, 42, 109, 0.4),
+    inset 0 0 10px rgba(255, 42, 109, 0.2);
+}
+
+.neon-button:hover {
+  background: rgba(255, 42, 109, 0.15);
+  filter: brightness(1.2);
+  box-shadow: 
+    0 0 10px var(--neon-pink),
+    0 0 20px var(--neon-pink),
+    0 0 40px rgba(255, 42, 109, 0.5),
+    0 0 60px rgba(255, 42, 109, 0.3),
+    inset 0 0 20px rgba(255, 42, 109, 0.3);
+}
+
+.neon-button:focus-visible {
+  outline: 2px solid var(--neon-white);
+  outline-offset: 4px;
+}
+
+.neon-button-subtle {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--neon-blue);
+  background: transparent;
+  border: 2px solid rgba(5, 217, 232, 0.5);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 
+    0 0 5px rgba(5, 217, 232, 0.3),
+    inset 0 0 5px rgba(5, 217, 232, 0.1);
+}
+
+.neon-button-subtle:hover {
+  border-color: var(--neon-blue);
+  box-shadow: 
+    0 0 10px rgba(5, 217, 232, 0.5),
+    0 0 20px rgba(5, 217, 232, 0.3),
+    inset 0 0 10px rgba(5, 217, 232, 0.2);
+}
+
+/* ===== Status Badges ===== */
+.badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.badge-released {
+  color: #00ff88;
+  border: 1px solid #00ff88;
+  text-shadow: 0 0 5px #00ff88;
+}
+
+.badge-in-development {
+  color: #ffcc00;
+  border: 1px solid #ffcc00;
+  text-shadow: 0 0 5px #ffcc00;
+}
+
+.badge-abandoned {
+  color: #666;
+  border: 1px solid #666;
+}
+
+/* ===== Utility Classes ===== */
+.text-shadow-none {
+  text-shadow: none;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(5, 217, 232, 0.4);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(5, 217, 232, 0.6);
+}
+
+/* Focus visible for accessibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--neon-blue);
+  outline-offset: 2px;
+}
+
+/* Responsive text */
+@media (max-width: 640px) {
+  .font-pixel {
+    font-size: 0.75rem;
+  }
+}

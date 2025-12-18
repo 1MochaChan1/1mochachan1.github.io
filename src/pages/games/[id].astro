@@ -1,0 +1,354 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+
+export async function getStaticPaths() {
+  const games = await getCollection("games");
+  return games.map((game) => {
+    const cleanId = game.id.replace(/\.md$/, '');
+    return {
+      params: { id: cleanId },
+      props: { game },
+    };
+  });
+}
+
+const { game } = Astro.props;
+const { title, cover, date, tags, status, link } = game.data;
+const { Content } = await render(game);
+
+// Status badge configuration
+const statusConfig: Record<string, { class: string; text: string }> = {
+  released: {
+    class: "badge-released",
+    text: "Released",
+  },
+  "in-development": {
+    class: "badge-in-development",
+    text: "In Development",
+  },
+  abandoned: {
+    class: "badge-abandoned",
+    text: "Abandoned",
+  },
+};
+
+const currentStatus = statusConfig[status] || statusConfig.released;
+---
+
+<Layout title={`${title} - NIGHTMARE ARCADE`}>
+  <main class="game-detail-main">
+    <!-- Back Button -->
+    <nav class="mb-6">
+      <a href="/games" class="neon-button-subtle inline-flex items-center gap-2">
+        <span>←</span>
+        <span>Back to Games</span>
+      </a>
+    </nav>
+
+    <!-- Game Detail Panel -->
+    <article class="game-panel">
+      <!-- Header -->
+      <header class="text-center mb-8">
+        <h1 class="text-xl sm:text-2xl md:text-4xl font-pixel uppercase neon-pink mb-4 leading-relaxed">
+          {title}
+        </h1>
+        <span class={`badge ${currentStatus.class}`}>
+          {currentStatus.text}
+        </span>
+      </header>
+
+      <!-- Cover Image -->
+      <div class="cover-container mb-8">
+        <div class="cover-frame">
+          <img
+            src={cover}
+            alt={title}
+            class="cover-image"
+          />
+        </div>
+      </div>
+
+      <!-- Meta Info -->
+      <div class="meta-grid mb-8">
+        <!-- Release Date -->
+        <div class="meta-item">
+          <p class="meta-label font-pixel text-xs neon-blue uppercase">Released</p>
+          <p class="meta-value text-sm text-gray-300 font-body mt-1">
+            {new Date(date).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
+        </div>
+
+        <!-- Tags -->
+        <div class="meta-item">
+          <p class="meta-label font-pixel text-xs neon-blue uppercase">Tags</p>
+          <div class="flex flex-wrap gap-2 mt-2">
+            {tags.map((tag) => (
+              <span class="tag-pill">{tag}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <!-- Description Content -->
+      <div class="content-section mb-8">
+        <div class="prose-content">
+          <Content />
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions-section text-center">
+        {link && status === "released" && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="neon-button inline-block"
+          >
+            PLAY NOW
+          </a>
+        )}
+
+        {status === "in-development" && (
+          <div class="coming-soon-badge">
+            COMING SOON
+          </div>
+        )}
+
+        {status === "abandoned" && (
+          <div class="abandoned-badge">
+            PROJECT ARCHIVED
+          </div>
+        )}
+      </div>
+    </article>
+
+    <!-- Footer Navigation -->
+    <footer class="mt-12 pt-6 border-t border-gray-800/50 text-center">
+      <a href="/games" class="neon-button-subtle">
+        ← Back to All Games
+      </a>
+    </footer>
+  </main>
+</Layout>
+
+<style>
+  .game-detail-main {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .game-panel {
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(5, 217, 232, 0.3);
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    box-shadow: 
+      0 0 20px rgba(5, 217, 232, 0.1),
+      inset 0 0 30px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (min-width: 768px) {
+    .game-panel {
+      padding: 3rem 2.5rem;
+    }
+  }
+
+  /* Cover Image Styling */
+  .cover-container {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  .cover-frame {
+    border: 3px solid #05d9e8;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 
+      0 0 10px rgba(5, 217, 232, 0.4),
+      0 0 20px rgba(5, 217, 232, 0.2),
+      inset 0 0 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .cover-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: linear-gradient(135deg, #0d0d1a, #1a1a2e);
+  }
+
+  /* Meta Grid */
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(5, 217, 232, 0.2);
+  }
+
+  @media (min-width: 640px) {
+    .meta-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .meta-label {
+    margin-bottom: 0.25rem;
+  }
+
+  /* Tags */
+  .tag-pill {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-family: 'Inter', sans-serif;
+    color: rgba(5, 217, 232, 0.8);
+    border: 1px solid rgba(5, 217, 232, 0.3);
+    border-radius: 4px;
+    background: rgba(5, 217, 232, 0.05);
+  }
+
+  /* Content Section */
+  .content-section {
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  /* Status Badges */
+  .coming-soon-badge {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    color: #ffcc00;
+    border: 2px solid rgba(255, 204, 0, 0.5);
+    border-radius: 4px;
+    background: rgba(255, 204, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
+  }
+
+  .abandoned-badge {
+    display: inline-block;
+    padding: 1rem 2rem;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    color: #666;
+    border: 2px solid rgba(102, 102, 102, 0.5);
+    border-radius: 4px;
+    background: rgba(102, 102, 102, 0.1);
+  }
+</style>
+
+<style is:global>
+  /* Prose/Content Styles */
+  .prose-content {
+    color: #e5e7eb;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.7;
+  }
+
+  .prose-content h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.875rem;
+    color: #ff2a6d;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    line-height: 1.8;
+    text-shadow: 0 0 10px rgba(255, 42, 109, 0.4);
+  }
+
+  .prose-content h3 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.75rem;
+    color: #05d9e8;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.8;
+    text-shadow: 0 0 8px rgba(5, 217, 232, 0.3);
+  }
+
+  .prose-content p {
+    margin-bottom: 1rem;
+    color: #d1d5db;
+  }
+
+  .prose-content strong {
+    color: #05d9e8;
+    text-shadow: 0 0 5px rgba(5, 217, 232, 0.3);
+  }
+
+  .prose-content a {
+    color: #05d9e8;
+    text-decoration: underline;
+    transition: color 0.3s ease;
+  }
+
+  .prose-content a:hover {
+    color: #ff2a6d;
+  }
+
+  .prose-content ul,
+  .prose-content ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose-content li {
+    margin-bottom: 0.5rem;
+    color: #d1d5db;
+  }
+
+  .prose-content ul li::marker {
+    color: #05d9e8;
+  }
+
+  .prose-content img {
+    border-radius: 8px;
+    border: 2px solid rgba(5, 217, 232, 0.3);
+    margin: 1.5rem 0;
+    max-width: 100%;
+  }
+
+  .prose-content blockquote {
+    border-left: 3px solid #ff2a6d;
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #9ca3af;
+  }
+
+  .prose-content code {
+    background: rgba(5, 217, 232, 0.1);
+    color: #05d9e8;
+    padding: 0.125rem 0.375rem;
+    border-radius: 4px;
+    font-size: 0.875em;
+  }
+
+  .prose-content pre {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(5, 217, 232, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+  }
+
+  .prose-content pre code {
+    background: transparent;
+    padding: 0;
+  }
+</style>

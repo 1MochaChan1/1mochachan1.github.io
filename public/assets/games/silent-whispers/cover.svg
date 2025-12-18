@@ -1,0 +1,13 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#c9184a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3a2357;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="#181824"/>
+  <rect width="400" height="300" fill="url(#grad2)" opacity="0.3"/>
+  <path d="M100 150 Q150 100 200 150 T300 150" fill="none" stroke="#c9184a" stroke-width="2" opacity="0.8"/>
+  <path d="M100 170 Q150 120 200 170 T300 170" fill="none" stroke="#c9184a" stroke-width="1" opacity="0.5"/>
+  <text x="200" y="260" text-anchor="middle" font-family="Arial" font-size="16" fill="#c9184a" opacity="0.8">WHISPERS</text>
+</svg>
